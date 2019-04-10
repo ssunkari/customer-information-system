@@ -1,5 +1,4 @@
-﻿using Api;
-using Api.Couchbase;
+﻿using Api.Couchbase;
 using Dao.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
-namespace SmokeTests
+namespace Api.AcceptanceTests
 {
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
     {
@@ -18,8 +17,8 @@ namespace SmokeTests
             builder.ConfigureAppConfiguration(b => b.AddJsonFile("appSettings.json"))
                 .ConfigureTestServices(s =>
                 {
-                    s.AddSingleton<ICouchbaseStartup>(p => new Mock<ICouchbaseStartup>().Object);
-                    s.AddSingleton<ICouchbaseOperations>(p => new Mock<ICouchbaseOperations>().Object);
+                    ServiceCollectionServiceExtensions.AddSingleton<ICouchbaseStartup>(s, p => new Mock<ICouchbaseStartup>().Object);
+                    ServiceCollectionServiceExtensions.AddSingleton<ICouchbaseOperations>(s, p => new Mock<ICouchbaseOperations>().Object);
                 });
         }
     }

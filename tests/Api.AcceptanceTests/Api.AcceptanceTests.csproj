@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="5.6.0" />
+        <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+        <PackageReference Include="Moq" Version="4.10.1" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+        <PackageReference Include="SpecFlow" Version="3.0.191" />
+        <PackageReference Include="SpecFlow.NUnit" Version="3.0.191" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.191" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Api\Api.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="InformationIngestionTests.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>InformationIngestionTests.feature</DependentUpon>
+      </Compile>
+      <Compile Update="StepBindings.cs">
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <SpecFlowFeatureFiles Update="InformationIngestionTests.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>InformationIngestionTests.feature.cs</LastGenOutput>
+      </SpecFlowFeatureFiles>
+    </ItemGroup>
+    <Target Name="AfterUpdateFeatureFilesInProject">
+        <!-- include any generated SpecFlow files in the compilation of the project if not included yet -->
+        <ItemGroup>
+            <Compile Include="**\*.feature.cs" Exclude="@(Compile)" />
+        </ItemGroup>
+    </Target>
+</Project>
