@@ -20,21 +20,20 @@ namespace SmokeTests
         public CustomWebApplicationFactory()
         {
             OperationResult = new Mock<IOperationResult<object>>();
+            OperationResult.SetupGet(x => x.Success).Returns(false);
 
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             //ConfigureTestServices which will run after Startup.ConfigureServices.
-            builder.ConfigureAppConfiguration(b => b.AddJsonFile("appSettings.json"))
+            builder.ConfigureAppConfiguration(b => b.AddJsonFile("appSettings.json", optional: true))
                 .ConfigureTestServices(s =>
                 {
                     s.AddSingleton<ICouchbaseStartup>(p => new Mock<ICouchbaseStartup>().Object);
                     s.AddSingleton<ICouchbaseOperations>(p =>
                     {
                         var couchbaseOperations = new Mock<ICouchbaseOperations>(MockBehavior.Strict);
-                      
-                        OperationResult.SetupGet(x => x.Success).Returns(false);
                         couchbaseOperations.Setup(x => x.Upsert(It.IsAny<Document<dynamic>>())).Returns(Task.CompletedTask);
                         couchbaseOperations.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(OperationResult.Object);
                         return couchbaseOperations.Object;

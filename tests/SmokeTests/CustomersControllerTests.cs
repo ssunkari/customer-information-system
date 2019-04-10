@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Api;
 using Api.Models;
+using Domain.Models;
 using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -115,6 +116,9 @@ namespace SmokeTests
         [Test]
         public async Task GetCusomterByIdEndpointTests()
         {
+            _factory.OperationResult.SetupGet(x => x.Success).Returns(true);
+            _factory.OperationResult.SetupGet(x => x.Value).Returns(JsonConvert.SerializeObject(new Customer("","","","")));
+            
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                 "Basic",
                 Convert.ToBase64String(

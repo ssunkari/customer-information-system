@@ -27,7 +27,7 @@ namespace Api.AcceptanceTests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             //ConfigureTestServices which will run after Startup.ConfigureServices.
-            builder.ConfigureAppConfiguration(b => b.AddJsonFile("appSettings.json"))
+            builder.ConfigureAppConfiguration(b => b.AddJsonFile("appSettings.json", optional: true))
                 .ConfigureTestServices(s =>
                 {
                     ServiceCollectionServiceExtensions.AddSingleton<ICouchbaseStartup>(s, p => new Mock<ICouchbaseStartup>().Object);
