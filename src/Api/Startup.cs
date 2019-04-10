@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Api.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -12,52 +10,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Api
 {
-
-    public class User
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }    
-        public string Id { get; set; }    
-    }
-
-    public interface IUserService
-    {
-        Task<User> Authenticate(string username, string password);
-        Task<IEnumerable<User>> GetAll();
-    }
-
-    public class UserService : IUserService
-    {
-        // users injected via config for simplicity, store in a db with hashed passwords in production applications
-        private readonly IList<User> _users;
-
-        public UserService(IList<User> users)
-        {
-            _users = users;
-        }
-    
-        public async Task<User> Authenticate(string username, string password)
-        {
-            var user = await Task.Run(() => _users.SingleOrDefault(x => x.Username == username && x.Password == password));
-
-            // return null if user not found
-            if (user == null)
-                return null;
-
-            // authentication successful so return user details without password
-            user.Password = null;
-            return user;
-        }
-
-        public async Task<IEnumerable<User>> GetAll()
-        {
-            // return users without passwords
-            return await Task.Run(() => _users.Select(x => {
-                x.Password = null;
-                return x;
-            }));
-        }
-    }
     public class Startup
     {
         public Startup(IConfiguration configuration)
