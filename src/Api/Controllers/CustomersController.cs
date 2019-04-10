@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
     {
 
         [HttpGet]
-        public ActionResult GetHealth(int id)
+        public ActionResult GetAll()
         {
-            return Ok();
+            return Ok(new List<CustomersApiResponseModel>());
         }
     }
 }
