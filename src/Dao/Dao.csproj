@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CouchbaseNetClient" Version="2.7.6" />
+    <PackageReference Include="OneOf" Version="2.1.139" />
   </ItemGroup>
 
   <ItemGroup>

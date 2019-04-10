@@ -1,5 +1,8 @@
-﻿using Api;
+﻿using System.Threading.Tasks;
+using Api;
 using Api.Couchbase;
+using Couchbase;
+using Dao.Helpers;
 using Dao.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -12,6 +15,14 @@ namespace SmokeTests
 {
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
     {
+        public Mock<IOperationResult<object>> OperationResult;
+
+        public CustomWebApplicationFactory()
+        {
+            OperationResult = new Mock<IOperationResult<object>>();
+
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             //ConfigureTestServices which will run after Startup.ConfigureServices.
@@ -19,7 +30,15 @@ namespace SmokeTests
                 .ConfigureTestServices(s =>
                 {
                     s.AddSingleton<ICouchbaseStartup>(p => new Mock<ICouchbaseStartup>().Object);
-                    s.AddSingleton<ICouchbaseOperations>(p => new Mock<ICouchbaseOperations>().Object);
+                    s.AddSingleton<ICouchbaseOperations>(p =>
+                    {
+                        var couchbaseOperations = new Mock<ICouchbaseOperations>(MockBehavior.Strict);
+                      
+                        OperationResult.SetupGet(x => x.Success).Returns(false);
+                        couchbaseOperations.Setup(x => x.Upsert(It.IsAny<Document<dynamic>>())).Returns(Task.CompletedTask);
+                        couchbaseOperations.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(OperationResult.Object);
+                        return couchbaseOperations.Object;
+                    });
                 });
         }
     }

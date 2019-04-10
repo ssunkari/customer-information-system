@@ -16,11 +16,13 @@ namespace SmokeTests
     {
         private HttpClient _client;
 
+        private CustomWebApplicationFactory<Startup> _factory;
+
         [OneTimeSetUp]
         public void GivenARequestToTheController()
         {
-            var factory = new CustomWebApplicationFactory<Startup>();
-            _client = factory.CreateClient();
+            _factory = new CustomWebApplicationFactory<Startup>();
+            _client = _factory.CreateClient();
         }
 
         private static readonly (string, string, string, string, HttpStatusCode)[] _authTestMappings =
@@ -77,7 +79,7 @@ namespace SmokeTests
         };
 
 
-       [TestCaseSource(nameof(_requestModelMappings))]
+        [TestCaseSource(nameof(_requestModelMappings))]
         public async Task CreateCustomerEndpointValidationTests((string, CustomersApiRequestModel, HttpStatusCode) testData)
         {
             var (_, inputRequest, expectedHttpStatusCode) = testData;
@@ -96,6 +98,7 @@ namespace SmokeTests
         [TestCaseSource(nameof(_requestModelMappings))]
         public async Task UpdateCustomerEndpointValidationTests((string, CustomersApiRequestModel, HttpStatusCode) testData)
         {
+            _factory.OperationResult.SetupGet(x => x.Success).Returns(true);
             var (_, inputRequest, expectedHttpStatusCode) = testData;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                 "Basic",

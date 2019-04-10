@@ -7,7 +7,7 @@ namespace Domain
         private string _firstname;
         private string _surname;
         private string _email;
-        private string _password;
+        private string hashPassword;
 
         public static CustomerBuilder Create()
         {
@@ -31,13 +31,13 @@ namespace Domain
         }
         public CustomerBuilder WithPassword(string value)
         {
-            _password = value;
+            hashPassword = value?.GetHashCode().ToString();
             return this;
         }
 
         public Customer Build()
         {
-            return new Customer(_firstname,_surname,_email,_password);
+            return new Customer(_firstname, _surname, _email, hashPassword);
         }
     }
 }

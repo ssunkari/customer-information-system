@@ -1,6 +1,9 @@
-﻿using Dao;
+﻿using System.Threading.Tasks;
+using Dao;
 using Dao.Interfaces;
 using Domain.Models;
+using OneOf;
+using OneOf.Types;
 
 namespace Api.Services
 {
@@ -13,9 +16,19 @@ namespace Api.Services
             this._customerRepository = customerRepository;
         }
 
-        public void Create(Customer customer)
+        public async Task<OneOf<Success, Error>> Create(Customer customer)
         {
-            _customerRepository.Create(customer);
+           return await _customerRepository.Create(customer);
+        }
+
+        public async Task<OneOf<Success, Error>> Update(Customer customer)
+        {
+            return await _customerRepository.Update(customer);
+        }
+
+        public async Task<OneOf<Customer, None>> Get(string id)
+        {
+            return await _customerRepository.Get(id);
         }
     }
 }

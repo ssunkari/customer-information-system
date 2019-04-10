@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Api.Models;
 using Api.Services;
 using Domain;
@@ -26,7 +27,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody]CustomersApiRequestModel model)
+        public async Task<ActionResult> Create([FromBody]CustomersApiRequestModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -40,30 +41,35 @@ namespace Api.Controllers
                 .WithPassword(model.Password)
                 .Build();
 
-            _applicationDirector.Create(customer);
-
-            return Ok();
+           return (await _applicationDirector.Create(customer)).Match<ActionResult>(success=>Ok(), error => BadRequest());
         }
 
         [HttpPut]
-        public ActionResult Update([FromBody]CustomersApiRequestModel model)
+        public async Task<ActionResult> Update([FromBody]CustomersApiRequestModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            return Ok();
+            var customer = CustomerBuilder.Create()
+                .WithFirstName(model.FirstName)
+                .WithSurname(model.Surname)
+                .WithEmail(model.Email)
+                .WithPassword(model.Password)
+                .Build();
+
+            return (await _applicationDirector.Update(customer)).Match<ActionResult>(success => Ok(), error => BadRequest());
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetById(string id)
+        public async Task<ActionResult> GetById(string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            return Ok(new CustomersApiRequestModel());
+            return (await _applicationDirector.Get(id)).Match<ActionResult>(success => Ok(success), none => BadRequest());
         }
     }
 }
