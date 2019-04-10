@@ -1,30 +1,30 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Api;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace SmokeTests
 {
-
-    public class HealthControllerTests
+    public class HealthControllerTests 
     {
-        private TestServerFixture _fixture;
+        private HttpClient _client;
 
         [OneTimeSetUp]
-        public void BeforeTest()
+        public void GivenARequestToTheController()
         {
-            _fixture = new TestServerFixture();
+            var factory = new CustomWebApplicationFactory<Startup>();
+            _client = factory.CreateClient();
         }
-
-        [TearDown]
-        public void CleanUp()
-        {
-            _fixture.Dispose();
-        }
+    
 
         [Test]
         public async Task HealthControllerHappyPath()
         {
-            var response = await _fixture.Client.GetAsync("api/health");
+            var response = await _client.GetAsync("api/health");
 
             response.EnsureSuccessStatusCode();
 
