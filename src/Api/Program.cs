@@ -2,6 +2,9 @@
 using Couchbase;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Api
 {
@@ -29,6 +32,13 @@ namespace Api
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .ConfigureServices(s =>
+                {
+                    s.AddSwaggerGen(c =>
+                    {
+                        c.SwaggerDoc("v1", new Info { Title = "Customer Information System", Version = "v1" });
+                    });
+                });
     }
 }

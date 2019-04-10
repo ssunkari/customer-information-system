@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -63,7 +64,22 @@ namespace Api
                 app.UseDeveloperExceptionPage();
             }
 
-           var couchbaseHandler = app.ApplicationServices.GetService<ICouchbaseStartup>();
+            //Use Swagger
+            //https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
+            //Redirect to Swagger https://github.com/domaindrivendev/Swashbuckle/issues/1227
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            app.UseRewriter(option);
+
+            var couchbaseHandler = app.ApplicationServices.GetService<ICouchbaseStartup>();
            var couchbaseConfiguration = Configuration.GetSection("couchbase").Get<CouchbaseConfiguration>();
            couchbaseHandler.Register(couchbaseConfiguration);
             app.UseAuthentication();
