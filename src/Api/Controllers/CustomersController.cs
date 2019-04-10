@@ -25,7 +25,7 @@ namespace Api.Controllers
                 return BadRequest();
             }
 
-            return Ok(new List<CustomersApiResponseModel>());
+            return Ok();
         }
     }
 }
