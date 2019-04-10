@@ -1,8 +1,24 @@
 version: '3.7'
 services:
+  couchbase:
+    build: ./couchbase/.
+    # hostname: couchbase
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210-11211:11210-11211"
+      - "8902:8902/udp"
+      - "8903:8903"
+    environment:
+      - COUCHBASE_ADMINISTRATOR_USERNAME=Administrator
+      - COUCHBASE_ADMINISTRATOR_PASSWORD=password
+      - COUCHBASE_BUCKET=customer-bucket
   web:
     build: .
     ports:
       - "5000:80"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      couchbase:Host: couchbase:8901
+      couchbase:BucketName: customer-bucket
+      couchbase:Username: Administrator
+      couchbase:Password: password
