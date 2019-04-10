@@ -28,6 +28,17 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public ActionResult Update([FromBody]CustomersApiRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
         [HttpGet("{id}")]
         public ActionResult GetById(string id)
         {

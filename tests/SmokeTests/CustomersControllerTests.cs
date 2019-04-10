@@ -95,6 +95,22 @@ namespace SmokeTests
             response.StatusCode.Should().Be(expectedHttpStatusCode);
         }
 
+        [TestCaseSource(nameof(_requestModelMappings))]
+        public async Task UpdateCustomerEndpointValidationTests((string, CustomersApiRequestModel, HttpStatusCode) testData)
+        {
+            var (_, inputRequest, expectedHttpStatusCode) = testData;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(
+                    System.Text.Encoding.ASCII.GetBytes(
+                        $"test:password")));
+
+            var response = await _client.PutAsync("/api/customers",
+                new StringContent(JsonConvert.SerializeObject(inputRequest), Encoding.UTF8, "application/json"));
+
+            response.StatusCode.Should().Be(expectedHttpStatusCode);
+        }
+
 
         [Test]
         public async Task GetCusomterByIdEndpointTests()
