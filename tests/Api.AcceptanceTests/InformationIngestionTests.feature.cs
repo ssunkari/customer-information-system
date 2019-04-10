@@ -195,6 +195,26 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("get all customer information")]
+        public virtual void GetAllCustomerInformation()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("get all customer information", null, ((string[])(null)));
+#line 41
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 42
+ testRunner.Given("I have existing customer record", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 43
+ testRunner.When("I request all customer records", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 44
+ testRunner.Then("I should get http Ok response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 45
+ testRunner.And("customer records are retrieved", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

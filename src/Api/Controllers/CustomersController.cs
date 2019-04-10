@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Models;
 using Api.Services;
+using Dao.Repositories;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +23,16 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetAll()
+        public async Task<ActionResult> GetAll()
         {
-            return Ok(new List<CustomersApiResponseModel>());
+            return (await _applicationDirector.GetAll()).Match<ActionResult>(success => Ok(success.Select(item=> new CustomersApiResponseModel
+            {
+                Id = item.Email.GetStableHashCode().ToString(),
+                FirstName = item.FirstName,
+                Email = item.Email,
+                Password = item.Password,
+                Surname = item.Surname
+            })), none => Ok(new List<CustomersApiResponseModel>()));
         }
 
         [HttpPost]
@@ -69,7 +78,14 @@ namespace Api.Controllers
                 return BadRequest();
             }
 
-            return (await _applicationDirector.Get(id)).Match<ActionResult>(success => Ok(success), none => BadRequest());
+            return (await _applicationDirector.Get(id)).Match<ActionResult>(success => Ok(new CustomersApiResponseModel
+            {
+                Id = success.Email.GetStableHashCode().ToString(),
+                FirstName = success.FirstName,
+                Email = success.Email,
+                Password = success.Password,
+                Surname = success.Surname
+            }), none => BadRequest());
         }
     }
 }

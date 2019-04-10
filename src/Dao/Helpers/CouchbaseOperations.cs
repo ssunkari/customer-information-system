@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Couchbase;
 using Couchbase.Core;
+using Couchbase.N1QL;
 using Dao.Interfaces;
+using Domain.Models;
 
 namespace Dao.Helpers
 {
@@ -30,6 +34,16 @@ namespace Dao.Helpers
             var bucket = await GetDefaultBucket();
             var operationResult = await bucket.GetAsync<dynamic>(key);
             return operationResult;
+        }
+
+        public async Task<List<Customer>> GetAll()
+        {
+            var queryRequest = new QueryRequest()
+                .Statement($"select firstName,surname,email,`password` from `{_bucketName}`")
+                .Metrics(false);
+            var bucket = await GetDefaultBucket();
+            var operationResult = await bucket.QueryAsync<Customer>(queryRequest);
+            return operationResult.ToList();
         }
     }
 }

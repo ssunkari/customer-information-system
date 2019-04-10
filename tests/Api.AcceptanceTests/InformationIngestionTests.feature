@@ -37,3 +37,9 @@ Scenario: get customer information success
 	Given I have existing customer record
 	When I request a customer record	
 	Then I should get http Ok response
+
+Scenario: get all customer information 
+	Given  I have existing customer record
+	When I request all customer records	
+	Then I should get http Ok response
+	And customer records are retrieved

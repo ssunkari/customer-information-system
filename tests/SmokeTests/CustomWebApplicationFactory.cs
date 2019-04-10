@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Api;
 using Api.Couchbase;
 using Couchbase;
 using Dao.Helpers;
 using Dao.Interfaces;
+using Domain.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -36,6 +38,7 @@ namespace SmokeTests
                         var couchbaseOperations = new Mock<ICouchbaseOperations>(MockBehavior.Strict);
                         couchbaseOperations.Setup(x => x.Upsert(It.IsAny<Document<dynamic>>())).Returns(Task.CompletedTask);
                         couchbaseOperations.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(OperationResult.Object);
+                        couchbaseOperations.Setup(x => x.GetAll()).ReturnsAsync(new List<Customer>());
                         return couchbaseOperations.Object;
                     });
                 });

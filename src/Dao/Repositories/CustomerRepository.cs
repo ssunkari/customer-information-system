@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Couchbase;
 using Dao.Interfaces;
 using Domain.Models;
@@ -59,6 +61,14 @@ namespace Dao.Repositories
                 return JsonConvert.DeserializeObject<Customer>(customerAlreadyExist.Value.ToString());
             }
             return new None();
+        }
+
+        public async Task<OneOf<List<Customer>, None>> GetAll()
+        {
+            var customerAlreadyExist = await _couchbaseOperations.GetAll();
+            if(customerAlreadyExist == null)
+            return new None();
+            return customerAlreadyExist;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -49,15 +50,16 @@ namespace Api.AcceptanceTests
         [Given(@"I database server is unavailable")]
         public void GivenIDatabaseServerIsUnavailable()
         {
-            _couchbaseClient.Setup(x=>x.Upsert(It.IsAny<Document<dynamic>>())).ThrowsAsync(new Exception("server is unavailable"));
+            _couchbaseClient.Setup(x => x.Upsert(It.IsAny<Document<dynamic>>())).ThrowsAsync(new Exception("server is unavailable"));
         }
 
         [Given(@"I have existing customer record")]
         public void GivenIHaveExistingCustomerRecord()
         {
             _operationResult.SetupGet(x => x.Success).Returns(true);
-            _operationResult.SetupGet(x => x.Value).Returns(JsonConvert.SerializeObject(new Customer("","","","")));
+            _operationResult.SetupGet(x => x.Value).Returns(JsonConvert.SerializeObject(new Customer("", "", "", "")));
             _couchbaseClient.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(_operationResult.Object);
+            _couchbaseClient.Setup(x => x.GetAll()).ReturnsAsync(() => new List<Customer> { new Customer("", "", "", "") });
         }
 
         [When(@"I submit a customer record")]
@@ -72,6 +74,13 @@ namespace Api.AcceptanceTests
         public async Task WhenIRequestACustomerRecord()
         {
             var response = await _client.GetAsync($"/api/customers/123");
+            _context.Set(response);
+        }
+
+        [When(@"I request all customer records")]
+        public async Task WhenIRequestAllCustomerRecords()
+        {
+            var response = await _client.GetAsync($"/api/customers");
             _context.Set(response);
         }
 
@@ -91,5 +100,14 @@ namespace Api.AcceptanceTests
             var response = _context.Get<HttpResponseMessage>();
             response.StatusCode.Should().Be(statusCode);
         }
+
+        [Then(@"customer records are retrieved")]
+        public async Task ThenCustomerRecordsAreRetrieved()
+        {
+            var response = _context.Get<HttpResponseMessage>();
+            var result = await response.Content.ReadAsStringAsync();
+            JsonConvert.DeserializeObject<List<Customer>>(result).Should().NotBeEmpty();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dao;
 using Dao.Interfaces;
 using Domain.Models;
@@ -29,6 +30,11 @@ namespace Api.Services
         public async Task<OneOf<Customer, None>> Get(string id)
         {
             return await _customerRepository.Get(id);
+        }
+
+        public async Task<OneOf<List<Customer>, None>> GetAll()
+        {
+            return await _customerRepository.GetAll();
         }
     }
 }
