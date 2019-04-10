@@ -19,7 +19,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetHealth(int id)
+        public ActionResult GetHealth()
         {
             var status = new
             {
