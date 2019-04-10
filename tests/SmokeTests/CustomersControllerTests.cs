@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Api;
 using FluentAssertions;
@@ -6,7 +9,7 @@ using NUnit.Framework;
 
 namespace SmokeTests
 {
-    public class HealthControllerTests 
+    public class CustomersControllerTests
     {
         private HttpClient _client;
 
@@ -16,18 +19,14 @@ namespace SmokeTests
             var factory = new CustomWebApplicationFactory<Startup>();
             _client = factory.CreateClient();
         }
-    
+
 
         [Test]
-        public async Task HealthControllerHappyPath()
+        public async Task GetCustomersShouldReturnOkResponse()
         {
-            var response = await _client.GetAsync("api/health");
+            var response = await _client.GetAsync("api/customers");
 
             response.EnsureSuccessStatusCode();
-
-            var responseStrong = await response.Content.ReadAsStringAsync();
-
-            responseStrong.Should().Be("{\"environment\":\"Development\"}");
         }
     }
 }
