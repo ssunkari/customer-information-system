@@ -2,12 +2,15 @@
 
 ### Business overview
 
-Customer information is managed for proof of concept purposes.
+An API used to store and retrieve customer information.
+
+The Api s developed as a proof of concept purpose.
 
 ### Technical overview
 
-AspDotNetCore service.
-Customer information such as email,firstname,surname and passwords are persisted and retreived from couchbase cocument database.
+Dotnet core 2.2 web api project.
+
+Hosted using Docker on Kubernetes.
 
 ### Service Level Agreements (SLAs)
 
@@ -35,11 +38,19 @@ Is hosted using docker as container.
 
 ### Environmental differences
 
-The auth keys are injected via environment variables, can be different for different environments.
+Nothing except for configuration for API endpoints/keys.
+
+Uses dotnet core ASPNETCORE_ENVIRONMENT environment variable.
 
 ### Tools
 
-See [here](/TESTING-RULES.md) for how to run performance tests.
+[docker-compose.yml](/docker-compose.yml) file exists to allow developer to easily run a local version of the API.
+
+Build: `docker-compose build`
+
+Run: `docker-compose up`
+
+See [here](/TESTING.md) for how to run performance tests.
 
 Postman pack is included in the root of the application for testing purposes.
 
@@ -50,6 +61,8 @@ Docker
 Docker-Compose
 
 POSTMAN
+
+allows 128 cpu and 256 memory
 
 ## System configuration
 

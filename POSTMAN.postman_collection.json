@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "435abe50-980f-44a8-8169-b49e490ed1b1",
+		"name": "CustomerInformationSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "HealthCheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URI}}/api/health",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllCustomers",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "administrator",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URI}}/api/customers",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCustomerById",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "administrator",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URI}}/api/customers/1974687772",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"1974687772"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateCustomer",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "administrator",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Firstname\": \"Renuka\",\n\t\"Surname\":\"Sunkari\",\n\t\"Email\":\"test@test.com\",\n\t\"Password\":\"password\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URI}}/api/customers",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateCustomer",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "administrator",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Firstname\": \"Srinivas\",\n\t\"Surname\":\"Sunkari\",\n\t\"Email\":\"test@test.com\",\n\t\"Password\":\"password\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URI}}/api/customers",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
