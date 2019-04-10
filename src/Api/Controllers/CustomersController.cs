@@ -16,5 +16,16 @@ namespace Api.Controllers
         {
             return Ok(new List<CustomersApiResponseModel>());
         }
+
+        [HttpPost]
+        public ActionResult Create(CustomersApiRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new List<CustomersApiResponseModel>());
+        }
     }
 }
