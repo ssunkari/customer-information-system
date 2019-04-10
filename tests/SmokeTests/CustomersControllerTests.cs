@@ -25,25 +25,26 @@ namespace SmokeTests
             _client = factory.CreateClient();
         }
 
-        private static readonly (string, string, string, HttpStatusCode)[] _authTestMappings =
+        private static readonly (string, string, string, string, HttpStatusCode)[] _authTestMappings =
         {
-            ("valid credentials", "administrator", "password", HttpStatusCode.OK),
-            ("valid credentials", "test", "password", HttpStatusCode.OK),
-            ("in valid credentials", "test123", "password", HttpStatusCode.Unauthorized)
+            ("valid credentials", "api/customers","administrator", "password", HttpStatusCode.OK),
+            ("valid credentials", "api/customers", "test", "password", HttpStatusCode.OK),
+            ("in valid credentials", "api/customers", "test123", "password", HttpStatusCode.Unauthorized),
+            ("in valid credentials", "api/customers/123", "test123", "password", HttpStatusCode.Unauthorized)
         };
 
         [TestCaseSource(nameof(_authTestMappings))]
 
-        public async Task BasicAuthTests((string, string, string, HttpStatusCode) testData)
+        public async Task BasicAuthTests((string, string, string, string, HttpStatusCode) testData)
         {
-            var (_, username, password, expectedHttpStatusCode) = testData;
+            var (_, relativePath,username, password, expectedHttpStatusCode) = testData;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                 "Basic",
                 Convert.ToBase64String(
                     System.Text.Encoding.ASCII.GetBytes(
                         $"{username}:{password}")));
 
-            var response = await _client.GetAsync("api/customers");
+            var response = await _client.GetAsync(relativePath);
             response.StatusCode.Should().BeEquivalentTo(expectedHttpStatusCode);
  
         }
@@ -92,6 +93,22 @@ namespace SmokeTests
                 new StringContent(JsonConvert.SerializeObject(inputRequest),Encoding.UTF8,"application/json"));
 
             response.StatusCode.Should().Be(expectedHttpStatusCode);
+        }
+
+
+        [Test]
+        public async Task GetCusomterByIdEndpointTests()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(
+                    System.Text.Encoding.ASCII.GetBytes(
+                        $"test:password")));
+            var id = "123";
+
+            var response = await _client.GetAsync($"/api/customers/{id}");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
     }

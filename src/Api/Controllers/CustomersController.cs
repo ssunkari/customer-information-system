@@ -18,7 +18,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(CustomersApiRequestModel model)
+        public ActionResult Create([FromBody]CustomersApiRequestModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -26,6 +26,17 @@ namespace Api.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult GetById(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new CustomersApiRequestModel());
         }
     }
 }
