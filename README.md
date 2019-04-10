@@ -75,6 +75,10 @@ Infrastructure configuration is in docker-compose.yml
 
 Secrets are passed in via secure environment variables at container run time.
 
+The application uses BasicAuth strategy, the username and password are stored in the app config temporarily
+
+The customer passwords are hashed for security reasons in the database.
+
 ## Monitoring and alerting
 
 None configured since its POC.
@@ -97,7 +101,7 @@ Any log message level of error is a critical error to the system.
 
 ### Health checks
 
-/api/status should return 200 if service is up.
+/api/health should return 200 if service is up.
 
 ### Alarms
 
