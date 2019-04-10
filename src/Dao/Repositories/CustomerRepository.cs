@@ -19,7 +19,7 @@ namespace Dao.Repositories
 
         public async Task<OneOf<Success,Error>> Create(Customer customer)
         {
-            var key = customer.Email.GetHashCode().ToString();
+            var key = customer.Email.GetStableHashCode().ToString();
             var customerAlreadyExist = await _couchbaseOperations.Get(key);
             if (customerAlreadyExist.Success)
             {
@@ -36,7 +36,7 @@ namespace Dao.Repositories
 
         public async Task<OneOf<Success, Error>> Update(Customer customer)
         {
-            var key = customer.Email.GetHashCode().ToString();
+            var key = customer.Email.GetStableHashCode().ToString();
             var customerAlreadyExist = await _couchbaseOperations.Get(key);
             if (!customerAlreadyExist.Success)
             {
