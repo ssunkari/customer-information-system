@@ -44,7 +44,7 @@ namespace Api
         protected virtual void ConfigureExternalDependencies(IServiceCollection services)
         {
             var couchbaseConfiguration = Configuration.GetSection("couchbase").Get<CouchbaseConfiguration>();
-            services.AddSingleton<ICouchbaseStartup>(p => new CouchbaseStartup(couchbaseConfiguration));
+            services.AddSingleton<ICouchbaseStartup>(p => new CouchbaseStartup());
             services.AddScoped<IApplicationDirector,ApplicationDirector>();
             services.AddScoped<ICustomerRepository,CustomerRepository>();
             services.AddScoped<ICouchbaseOperations>(p=>new CouchbaseOperations(couchbaseConfiguration.BucketName));
@@ -62,6 +62,10 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+           var couchbaseHandler = app.ApplicationServices.GetService<ICouchbaseStartup>();
+           var couchbaseConfiguration = Configuration.GetSection("couchbase").Get<CouchbaseConfiguration>();
+           couchbaseHandler.Register(couchbaseConfiguration);
             app.UseAuthentication();
             app.UseMvc();
         }

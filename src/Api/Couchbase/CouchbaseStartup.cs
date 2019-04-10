@@ -8,11 +8,7 @@ namespace Api.Couchbase
 {
     public  class CouchbaseStartup : ICouchbaseStartup
     {
-        public CouchbaseStartup(CouchbaseConfiguration configuration)
-        {
-            Register(configuration);
-        }
-        private static void Register(CouchbaseConfiguration configuration)
+        public void Register(CouchbaseConfiguration configuration)
         {
             ClusterHelper.Initialize(new ClientConfiguration
             {
