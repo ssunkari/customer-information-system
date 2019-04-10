@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
+using Api.Couchbase;
 using Api.Helpers;
+using Api.Services;
+using Dao;
+using Dao.Helpers;
+using Dao.Interfaces;
+using Dao.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Api
 {
@@ -33,6 +38,16 @@ namespace Api
             });
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            ConfigureExternalDependencies(services);
+        }
+
+        protected virtual void ConfigureExternalDependencies(IServiceCollection services)
+        {
+            var couchbaseConfiguration = Configuration.GetSection("couchbase").Get<CouchbaseConfiguration>();
+            services.AddSingleton<ICouchbaseStartup>(p => new CouchbaseStartup(couchbaseConfiguration));
+            services.AddScoped<IApplicationDirector,ApplicationDirector>();
+            services.AddScoped<ICustomerRepository,CustomerRepository>();
+            services.AddScoped<ICouchbaseOperations>(p=>new CouchbaseOperations(couchbaseConfiguration.BucketName));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

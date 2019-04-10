@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Api.Models;
+using Api.Services;
+using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +12,12 @@ namespace Api.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
+        private readonly IApplicationDirector _applicationDirector;
+
+        public CustomersController(IApplicationDirector applicationDirector)
+        {
+            _applicationDirector = applicationDirector;
+        }
 
         [HttpGet]
         public ActionResult GetAll()
@@ -25,6 +33,15 @@ namespace Api.Controllers
                 return BadRequest();
             }
 
+            var customer = CustomerBuilder.Create()
+                .WithFirstName(model.FirstName)
+                .WithSurname(model.Surname)
+                .WithEmail(model.Email)
+                .WithPassword(model.Password)
+                .Build();
+
+            _applicationDirector.Create(customer);
+
             return Ok();
         }
 
@@ -35,7 +52,6 @@ namespace Api.Controllers
             {
                 return BadRequest();
             }
-
             return Ok();
         }
 

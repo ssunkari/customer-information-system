@@ -10,4 +10,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dao\Dao.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Couchbase.NetClient">
+      <HintPath>..\..\..\..\..\Users\srinivas.sunkari\.nuget\packages\couchbasenetclient\2.7.6\lib\netstandard2.0\Couchbase.NetClient.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
